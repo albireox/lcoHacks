@@ -26,12 +26,13 @@ def restoreLCODevDB():
 
     # First we drop lcodb_dev
     print('Dropping lcodb_dev ... ')
-    dropdb = subprocess.Popen('dropdb lcodb_dev', shell=True)
+    dropdb = subprocess.Popen('dropdb -U postgres lcodb_dev', shell=True)
     dropdb.communicate()
 
     # Recreates the DB
     print('Creating lcodb_dev ... ')
-    createdb = subprocess.Popen('createdb -T template0 lcodb_dev', shell=True)
+    createdb = subprocess.Popen('createdb -T template0 -U postgres lcodb_dev',
+                                shell=True)
     createdb.communicate()
 
     # Restores platedb and catalogdb
@@ -40,7 +41,8 @@ def restoreLCODevDB():
         print('Restoring {0} ... '.format(schema))
         path = os.path.join(apodb_path, file)
         restoreSchema = subprocess.Popen(
-            'pg_restore -d lcodb_dev -Fc {0}'.format(path), shell=True)
+            'pg_restore -d lcodb_dev -Fc -U sdssdb_admin {0}'.format(path),
+            shell=True)
         restoreSchema.communicate()
 
     # Now that the DB exists, imports the model classes
