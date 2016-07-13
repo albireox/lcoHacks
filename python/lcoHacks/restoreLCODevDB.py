@@ -87,10 +87,10 @@ def restoreLCODevDB():
     with session.begin():
         for cart in cartridges:
             if cart.number <= 5:
-                cart.number += 20
-            else:
                 pass
-                # session.delete(cart)
+                # cart.number += 20
+            else:
+                session.delete(cart)
 
     return
 
