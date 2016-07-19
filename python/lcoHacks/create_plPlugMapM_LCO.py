@@ -22,7 +22,6 @@ import string
 
 
 cart = 20
-mjd = 57514
 nGuides = 16
 
 # Links field numbers to marking colours
@@ -54,7 +53,7 @@ idlVersion 7.1
 """
 
 
-def addHeader(header, file, plateID, fscanID, field, fieldColour):
+def addHeader(header, file, plateID, fscanID, field, mjd, fieldColour):
     """Adds a header to a yanny file after the commented section."""
 
     fscanData = template.format(plateID=plateID, mjd=mjd, fscanID=fscanID,
@@ -92,7 +91,7 @@ def getLookupArray(lookupTable):
     return np.loadtxt(lookupTable).astype(np.int)
 
 
-def create_plPlugMapM_LCO(plateID, pointing, field,
+def create_plPlugMapM_LCO(plateID, pointing, field, mjd,
                           lookupTable=None, fscanId=1):
     """Converts the plPlugMapP files for a `plateID` into a plPlugMapM.
 
@@ -164,7 +163,8 @@ def create_plPlugMapM_LCO(plateID, pointing, field,
             header[ii] = guides
             break
 
-    addHeader(header, outFileName, plateID, fscanId, field, colourDict[field])
+    addHeader(header, outFileName, plateID, fscanId, field,
+              mjd, colourDict[field])
 
     return
 
@@ -176,6 +176,7 @@ if __name__ == '__main__':
     parser.add_argument('PLATEID', type=int, help='The plateID.')
     parser.add_argument('POINTING', type=str, help='The pointing.')
     parser.add_argument('FIELD', type=int, help='The field to map.')
+    parser.add_argument('MJD', type=int, help='The MJD of the scan.')
     parser.add_argument('--lookupTable', '-l', metavar='lookupTable',
                         type=str, default=None,
                         help='The lookup table linking fibres and holes.')
@@ -184,5 +185,5 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    create_plPlugMapM_LCO(args.PLATEID, args.POINTING, args.FIELD,
+    create_plPlugMapM_LCO(args.PLATEID, args.POINTING, args.FIELD, args.MJD,
                           lookupTable=args.lookupTable, fscanId=args.fscanId)
