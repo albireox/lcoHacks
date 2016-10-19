@@ -47,6 +47,7 @@ motorId3     3
 cartridgeId  {cart}
 fieldNumber  {field}
 fieldColour  {fieldColour}
+instruments  APOGEE_SOUTH
 fmapVersion NOCVS:v6_0_7
 idlutilsVersion v5_5_17
 idlVersion 7.1
