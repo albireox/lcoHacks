@@ -15,6 +15,9 @@ from opscore.protocols.parser import CommandParser
 from opscore.utility.qstr import qstr
 from opscore.utility.tback import tback
 
+from opscore.utility.sdss3logging import setupRootLogger, setConsoleLevel
+import logging
+
 import opscore.protocols.keys as keys
 import opscore.protocols.validation as validation
 
@@ -46,6 +49,8 @@ class FakeGuider(object):
         self.product_dir = os.path.expandvars(product_dir_name)
 
         self.parser = CommandParser()
+
+        self.configureLogs()
 
         self.config = ConfigParser.ConfigParser()
         self.config.read(os.path.join(os.path.dirname(__file__), 'guider.cfg'))
@@ -83,6 +88,39 @@ class FakeGuider(object):
             self.cmdr.connect()
         else:
             self.cmdr = None
+
+    def configureLogs(self, cmd=None):
+        """ (re-)configure our logs. """
+
+        self.logDir = self.config.get('logging', 'logdir')
+        assert self.logDir, "logdir must be set!"
+
+        # Make the root logger go to a rotating file. All others derive from this.
+        setupRootLogger(self.logDir)
+
+        # The real stderr/console filtering is actually done through the console Handler.
+        try:
+            consoleLevel = int(self.config.get('logging','consoleLevel'))
+        except:
+            consoleLevel = int(self.config.get('logging','baseLevel'))
+        setConsoleLevel(consoleLevel)
+
+        # self.console needs to be renamed ore deleted, I think.
+        self.console = logging.getLogger('')
+        self.console.setLevel(int(self.config.get('logging','baseLevel')))
+
+        self.logger = logging.getLogger('actor')
+        self.logger.setLevel(int(self.config.get('logging','baseLevel')))
+        self.logger.propagate = True
+        self.logger.info('(re-)configured root and actor logs')
+
+        self.cmdLog = logging.getLogger('cmds')
+        self.cmdLog.setLevel(int(self.config.get('logging','cmdLevel')))
+        self.cmdLog.propagate = True
+        self.cmdLog.info('(re-)configured cmds log')
+
+        if cmd:
+            cmd.inform('text="reconfigured logs"')
 
     def triggerHubConnection(self):
         """ Send the hub a command to connect back to us. """
