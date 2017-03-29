@@ -50,10 +50,10 @@ class FakeGuider(object):
 
         self.parser = CommandParser()
 
-        self.configureLogs()
-
         self.config = ConfigParser.ConfigParser()
         self.config.read(os.path.join(os.path.dirname(__file__), 'guider.cfg'))
+
+        self.configureLogs()
 
         # The list of all connected sources.
         tronInterface = ''
@@ -100,22 +100,22 @@ class FakeGuider(object):
 
         # The real stderr/console filtering is actually done through the console Handler.
         try:
-            consoleLevel = int(self.config.get('logging','consoleLevel'))
+            consoleLevel = int(self.config.get('logging', 'consoleLevel'))
         except:
-            consoleLevel = int(self.config.get('logging','baseLevel'))
+            consoleLevel = int(self.config.get('logging', 'baseLevel'))
         setConsoleLevel(consoleLevel)
 
         # self.console needs to be renamed ore deleted, I think.
         self.console = logging.getLogger('')
-        self.console.setLevel(int(self.config.get('logging','baseLevel')))
+        self.console.setLevel(int(self.config.get('logging', 'baseLevel')))
 
         self.logger = logging.getLogger('actor')
-        self.logger.setLevel(int(self.config.get('logging','baseLevel')))
+        self.logger.setLevel(int(self.config.get('logging', 'baseLevel')))
         self.logger.propagate = True
         self.logger.info('(re-)configured root and actor logs')
 
         self.cmdLog = logging.getLogger('cmds')
-        self.cmdLog.setLevel(int(self.config.get('logging','cmdLevel')))
+        self.cmdLog.setLevel(int(self.config.get('logging', 'cmdLevel')))
         self.cmdLog.propagate = True
         self.cmdLog.info('(re-)configured cmds log')
 
