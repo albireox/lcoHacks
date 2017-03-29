@@ -363,4 +363,5 @@ class FakeGuider(object):
 
 if __name__ == '__main__':
     guider = FakeGuider('guider')
-    guider.run()
+    guider.run(startThreads=False)
+    guider.output_file()
