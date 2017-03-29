@@ -22,6 +22,7 @@ import actorcore.CommandLinkManager as cmdLinkManager
 import actorcore.Command as actorCmd
 import actorcore.CmdrConnection
 
+import ConfigParser
 import Queue
 
 from twisted import reactor
@@ -36,6 +37,7 @@ import traceback
 
 
 class FakeGuider(object):
+
     def __init__(self, name, productName='guiderActor', makeCmdrConnection=True):
 
         self.name = name
@@ -44,6 +46,9 @@ class FakeGuider(object):
         self.product_dir = os.path.expandvars(product_dir_name)
 
         self.parser = CommandParser()
+
+        self.config = ConfigParser.ConfigParser()
+        self.config.read(os.path.join(os.path.dirname(__file__), 'guider.cfg'))
 
         # The list of all connected sources.
         tronInterface = ''
@@ -297,6 +302,10 @@ class FakeGuider(object):
         if doReactor:
             self.logger.info("reactor dead, cleaning up...")
             self._shutdown()
+
+    def output_file(self):
+        self.bcast.inform('text="THIS IS A VERY LOUD TEST"')
+        reactor.callLater(5, self.output_file)
 
 
 if __name__ == '__main__':
