@@ -230,8 +230,8 @@ class FakeGuider(object):
         if path is None:
             self.attachAllCmdSets(path=os.path.join(os.path.expandvars('$ACTORCORE_DIR'),
                                                     'python', 'actorcore', 'Commands'))
-            self.attachAllCmdSets(path=os.path.join(self.product_dir, 'python', self.productName,
-                                                    'Commands'))
+            # self.attachAllCmdSets(path=os.path.join(self.product_dir, 'python', self.productName,
+            #                                         'Commands'))
             return
 
         dirlist = os.listdir(path)
@@ -363,5 +363,5 @@ class FakeGuider(object):
 
 if __name__ == '__main__':
     guider = FakeGuider('guider')
-    guider.run(startThreads=False)
+    guider.run()
     guider.output_file()
