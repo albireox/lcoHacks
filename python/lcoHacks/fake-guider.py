@@ -252,6 +252,9 @@ class FakeGuider(object):
         return "%r at %s:%d" % (eValue, where[0], where[1])
 
     def runActorCmd(self, cmd):
+
+        self.output_file()
+
         try:
             cmdStr = cmd.rawCmd
             self.cmdLog.debug('raw cmd: %s' % (cmdStr))
@@ -357,11 +360,10 @@ class FakeGuider(object):
             self._shutdown()
 
     def output_file(self):
-        self.bcast.inform('text="THIS IS A VERY LOUD TEST"')
+        self.bcast.warn('text="THIS IS A VERY LOUD TEST"')
         reactor.callLater(5, self.output_file)
 
 
 if __name__ == '__main__':
     guider = FakeGuider('guider')
     guider.run()
-    guider.output_file()
