@@ -122,6 +122,21 @@ class FakeGuider(object):
         if cmd:
             cmd.inform('text="reconfigured logs"')
 
+    def versionString(self, cmd):
+        """ Return the version key value.
+
+        If you simply want to generate the keyword, call .sendVersionKey().
+        """
+
+        cmd.warn("text='pathetic version string: unknown'")
+        return 'unknown'
+
+    def sendVersionKey(self, cmd):
+        """ Generate the version keyword in response to cmd. """
+
+        version = self.versionString(cmd)
+        cmd.inform('version=%s' % (qstr(version)))
+
     def triggerHubConnection(self):
         """ Send the hub a command to connect back to us. """
 
