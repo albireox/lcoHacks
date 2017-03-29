@@ -42,7 +42,7 @@ import traceback
 class FakeGuider(object):
 
     def __init__(self, name, productName='guiderActor', makeCmdrConnection=True):
-
+        self.ii = 1026
         self.name = name
         self.productName = productName if productName else self.name
         product_dir_name = '$%s_DIR' % (self.productName.upper())
@@ -360,7 +360,9 @@ class FakeGuider(object):
             self._shutdown()
 
     def output_file(self):
-        self.bcast.inform('file="/data/gcam/57831/,proc-gimg-1026.fits.gz"')
+        self.bcast.inform('guideState="on"')
+        self.bcast.inform('file=/data/gcam/57831/,proc-gimg-{0}.fits.gz'.format(self.ii))
+        self.ii += 1
         reactor.callLater(10, self.output_file)
 
 
