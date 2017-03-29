@@ -25,7 +25,7 @@ import actorcore.CmdrConnection
 import ConfigParser
 import Queue
 
-from twisted import reactor
+from twisted.internet import reactor
 
 import imp
 import inspect
