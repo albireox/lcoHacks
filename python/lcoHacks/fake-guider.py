@@ -360,7 +360,7 @@ class FakeGuider(object):
             self._shutdown()
 
     def output_file(self):
-        self.bcast.warn('file="/data/gcam/57831/proc-gimg-1026.fits.gz"')
+        self.bcast.warn('file="/data/gcam/57831/,proc-gimg-1026.fits.gz"')
         reactor.callLater(10, self.output_file)
 
 
